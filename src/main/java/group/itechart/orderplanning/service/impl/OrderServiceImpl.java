@@ -4,7 +4,9 @@ import static group.itechart.orderplanning.utils.GeoHashUtils.calculateDistance;
 import static group.itechart.orderplanning.utils.GeoHashUtils.getCommonGeoHashForCircle;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -65,41 +67,39 @@ public class OrderServiceImpl implements OrderService {
 	}
 
 	private WareHouse calculateNearestWareHouse(final Client client) {
-		//		if (wareHouses.size() == 1) {
-		//			return wareHouses.get(0);
-		//		}
-
-		String customerCity = client.getCity().getName();
 		final Coordinates coordinates = client.getCity().getCoordinates();
 
-		//		for (WareHouse wareHouse : wareHouses) {
-		//			final Coordinates warehouseCoordinates = wareHouse.getCity().getCoordinates();
-		//			final double distance = distance(coordinates.getLatitude(), coordinates.getLongitude(),
-		//					warehouseCoordinates.getLatitude(), warehouseCoordinates.getLongitude());
-		//			System.out.println("Distance between: " + customerCity + " and " + wareHouse.getCity().getName() + " is " + distance);
-		//		}
-
-		double radius = 1;
+		double radius = 0.1;
 		List<WareHouse> wareHouses = new ArrayList<>();
 
-		final String clientGeoHash = GeoHash.geoHashStringWithCharacterPrecision(coordinates.getLatitude(), coordinates.getLongitude(), 12);
-		while (wareHouses.isEmpty() || radius < 1000) {
+		final String clientGeoHash = GeoHash.geoHashStringWithCharacterPrecision(coordinates.getLatitude(),
+				coordinates.getLongitude(), 12);
+
+		while (wareHouses.isEmpty() && radius < 1000) {
 			System.out.println("------SEARCHING WAREHOUSES IN " + radius + " km radius-------------");
 
 			final String commonGeoHashForCircle = getCommonGeoHashForCircle(coordinates.getLatitude(), coordinates.getLongitude(),
 					radius);
 
 			wareHouses = wareHouseService.findByGeoHash(commonGeoHashForCircle);
-			radius *= 10;
+
+			System.out.println("commonGeoHashForCircle: " + commonGeoHashForCircle);
 			System.out.println("------was found " + wareHouses.size() + " warehouses");
+			Map<String, List<WareHouse>> actualWareHouses = new HashMap<>();
 			for (WareHouse wareHouse : wareHouses) {
 				final double distance = calculateDistance(wareHouse.getGeoHash(), clientGeoHash);
 				System.out.println("distance " + distance);
+				final String distanceString = String.valueOf(distance);
 
+				if (actualWareHouses.containsKey(distanceString)) {
+					actualWareHouses.get(distanceString).add(wareHouse);
+				}
+				else {
+					actualWareHouses.put(distanceString, List.of(wareHouse));
+				}
 			}
+			radius *= 6;
 		}
-
-		System.out.println();
 
 		return null;
 	}

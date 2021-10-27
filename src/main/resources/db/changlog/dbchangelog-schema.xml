@@ -71,6 +71,11 @@
 			<column name="name" type="VARCHAR(255)"/>
 			<column name="city_id" type="BIGINT"/>
 			<column name="geo_hash" type="VARCHAR(255)"/>
+			<column name="geo_hash6" type="VARCHAR(255)"/>
+			<column name="geo_hash5" type="VARCHAR(255)"/>
+			<column name="geo_hash4" type="VARCHAR(255)"/>
+			<column name="geo_hash3" type="VARCHAR(255)"/>
+			<column name="geo_hash2" type="VARCHAR(255)"/>
 		</createTable>
 	</changeSet>
 	<changeSet author="Alexei.Erofeev (generated)" id="1635246603605-8">

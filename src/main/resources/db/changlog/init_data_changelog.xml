@@ -50,6 +50,11 @@
 			<column name="name" value="Central"/>
 			<column name="city_id" value="3"/>
 			<column name="geo_hash" value="u9dgxs4gu"/>
+			<column name="geo_hash6" value="u9dgxs"/>
+			<column name="geo_hash5" value="u9dgx"/>
+			<column name="geo_hash4" value="u9dg"/>
+			<column name="geo_hash3" value="u9d"/>
+			<column name="geo_hash2" value="u9"/>
 		</insert>
 <!--		<insert tableName="ware_house">-->
 <!--			<column name="id" value="2"/>-->
@@ -62,18 +67,43 @@
 			<column name="name" value="North-East"/>
 			<column name="city_id" value="3"/>
 			<column name="geo_hash" value="u9e5r3ts"/>
+			<column name="geo_hash6" value="u9e5r3"/>
+			<column name="geo_hash5" value="u9e5r"/>
+			<column name="geo_hash4" value="u9e5"/>
+			<column name="geo_hash3" value="u9e"/>
+			<column name="geo_hash2" value="u9"/>
 		</insert>
 		<insert tableName="ware_house">
 			<column name="id" value="4"/>
 			<column name="name" value="North-East2"/>
 			<column name="city_id" value="3"/>
 			<column name="geo_hash" value="u9e5pe7jx"/>
+			<column name="geo_hash6" value="u9e5pe"/>
+			<column name="geo_hash5" value="u9e5p"/>
+			<column name="geo_hash4" value="u9e5"/>
+			<column name="geo_hash3" value="u9e"/>
+			<column name="geo_hash2" value="u9"/>
 		</insert>
 	</changeSet>
 
 	<changeSet author="Alexei.Erofeev" id="1_createIndex_index_one">
 		<createIndex indexName="geo_index" tableName="ware_house">
 			<column name="geo_hash"/>
+		</createIndex>
+		<createIndex indexName="geo_index6" tableName="ware_house">
+			<column name="geo_hash6"/>
+		</createIndex>
+		<createIndex indexName="geo_index5" tableName="ware_house">
+			<column name="geo_hash5"/>
+		</createIndex>
+		<createIndex indexName="geo_index4" tableName="ware_house">
+			<column name="geo_hash4"/>
+		</createIndex>
+		<createIndex indexName="geo_index3" tableName="ware_house">
+			<column name="geo_hash3"/>
+		</createIndex>
+		<createIndex indexName="geo_index2" tableName="ware_house">
+			<column name="geo_hash2"/>
 		</createIndex>
 	</changeSet>
 

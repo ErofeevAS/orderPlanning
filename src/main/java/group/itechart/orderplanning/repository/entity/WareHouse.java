@@ -38,6 +38,21 @@ public class WareHouse {
 	@Column(name = "geo_hash")
 	private String geoHash;
 
+	@Column(name = "geo_hash6")
+	private String geoHash6;
+
+	@Column(name = "geo_hash5")
+	private String geoHash5;
+
+	@Column(name = "geo_hash4")
+	private String geoHash4;
+
+	@Column(name = "geo_hash3")
+	private String geoHash3;
+
+	@Column(name = "geo_hash2")
+	private String geoHash2;
+
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST })
 	@JoinColumn(name = "city_id")
 	private City city;

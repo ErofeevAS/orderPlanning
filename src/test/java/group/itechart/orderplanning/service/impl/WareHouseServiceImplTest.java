@@ -1,13 +1,14 @@
 package group.itechart.orderplanning.service.impl;
 
 import static group.itechart.orderplanning.utils.GeoHashUtils.getCommonGeoHashForCircle;
+import static group.itechart.orderplanning.utils.GeoHashUtils.getSymbolPosition;
+import static group.itechart.orderplanning.utils.GeoHashUtils.getSymbolsBetween;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.util.List;
 import java.util.SortedMap;
 import java.util.TreeMap;
 
-import org.apache.commons.lang3.StringUtils;
 import org.junit.jupiter.api.Test;
 
 import ch.hsr.geohash.GeoHash;
@@ -67,6 +68,10 @@ class WareHouseServiceImplTest {
 		double clientLong = 26.797508283486113;
 
 		final String commonGeoHashForCircle = getCommonGeoHashForCircle(clientLat, clientLong, 5);
+
+		final int[] es = getSymbolPosition("e");
+
+		final List<String> symbolsBetween = getSymbolsBetween("c", "d");
 
 		assertEquals("123", "11");
 	}

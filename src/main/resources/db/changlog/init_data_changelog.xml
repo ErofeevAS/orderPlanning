@@ -1,0 +1,124 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+
+	<changeSet author="Alexei.Erofeev" id="1-1">
+		<insert tableName="product">
+			<column name="id" value="1"/>
+			<column name="name" value="phone"/>
+			<column name="price" value="900"/>
+		</insert>
+		<insert tableName="product">
+			<column name="id" value="2"/>
+			<column name="name" value="car"/>
+			<column name="price" value="9000"/>
+		</insert>
+		<insert tableName="product">
+			<column name="id" value="3"/>
+			<column name="name" value="camera"/>
+			<column name="price" value="100"/>
+		</insert>
+	</changeSet>
+
+	<changeSet author="Alexei.Erofeev" id="1-2">
+		<insert tableName="city">
+			<column name="id" value="1"/>
+			<column name="name" value="Minsk"/>
+			<column name="latitude" value="53.893009"/>
+			<column name="longitude" value="27.567444"/>
+		</insert>
+		<insert tableName="city">
+			<column name="id" value="2"/>
+			<column name="name" value="Hrodno"/>
+			<column name="latitude" value="54.076235825729185"/>
+			<column name="longitude" value="26.783177389068793"/>
+		</insert>
+		<insert tableName="city">
+			<column name="id" value="3"/>
+			<column name="name" value="Vitebsk"/>
+			<column name="latitude" value="55.1904"/>
+			<column name="longitude" value="30.2049"/>
+		</insert>
+
+	</changeSet>
+
+	<changeSet author="Alexei.Erofeev" id="1-3">
+		<insert tableName="ware_house">
+			<column name="id" value="1"/>
+			<column name="name" value="Central"/>
+			<column name="city_id" value="3"/>
+			<column name="geo_hash" value="u9dgxs4gu"/>
+		</insert>
+<!--		<insert tableName="ware_house">-->
+<!--			<column name="id" value="2"/>-->
+<!--			<column name="name" value="West"/>-->
+<!--			<column name="city_id" value="3"/>-->
+<!--			<column name="geo_hash" value="u9edemxuz"/>-->
+<!--		</insert>-->
+		<insert tableName="ware_house">
+			<column name="id" value="3"/>
+			<column name="name" value="North-East"/>
+			<column name="city_id" value="3"/>
+			<column name="geo_hash" value="u9e5r3ts"/>
+		</insert>
+		<insert tableName="ware_house">
+			<column name="id" value="4"/>
+			<column name="name" value="North-East2"/>
+			<column name="city_id" value="3"/>
+			<column name="geo_hash" value="u9e5pe7jx"/>
+		</insert>
+	</changeSet>
+
+	<changeSet author="Alexei.Erofeev" id="1_createIndex_index_one">
+		<createIndex indexName="geo_index" tableName="ware_house">
+			<column name="geo_hash"/>
+		</createIndex>
+	</changeSet>
+
+	<changeSet author="Alexei.Erofeev" id="1-4">
+		<insert tableName="stock_level">
+			<column name="id" value="1"/>
+			<column name="product_id" value="1"/>
+			<column name="ware_house_id" value="1"/>
+			<column name="amount" value="100"/>
+		</insert>
+		<insert tableName="stock_level">
+			<column name="id" value="2"/>
+			<column name="product_id" value="2"/>
+			<column name="ware_house_id" value="1"/>
+			<column name="amount" value="1000"/>
+		</insert>
+		<insert tableName="stock_level">
+			<column name="id" value="3"/>
+			<column name="product_id" value="3"/>
+			<column name="ware_house_id" value="1"/>
+			<column name="amount" value="500"/>
+		</insert>
+
+<!--		<insert tableName="stock_level">-->
+<!--			<column name="id" value="4"/>-->
+<!--			<column name="product_id" value="1"/>-->
+<!--			<column name="ware_house_id" value="2"/>-->
+<!--			<column name="amount" value="200"/>-->
+<!--		</insert>-->
+
+		<insert tableName="stock_level">
+			<column name="id" value="5"/>
+			<column name="product_id" value="1"/>
+			<column name="ware_house_id" value="3"/>
+			<column name="amount" value="200"/>
+		</insert>
+	</changeSet>
+
+	<changeSet author="Alexei.Erofeev" id="1-5">
+		<insert tableName="client">
+			<column name="id" value="1"/>
+			<column name="name" value="john"/>
+			<column name="city_id" value="2"/>
+		</insert>
+
+	</changeSet>
+
+</databaseChangeLog>

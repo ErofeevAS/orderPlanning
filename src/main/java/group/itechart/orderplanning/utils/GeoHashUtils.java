@@ -1,11 +1,15 @@
 package group.itechart.orderplanning.utils;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import ch.hsr.geohash.GeoHash;
+import lombok.extern.slf4j.Slf4j;
 
 
+@Slf4j
 public class GeoHashUtils {
 
 	private GeoHashUtils() {
@@ -14,46 +18,92 @@ public class GeoHashUtils {
 
 	private static final Integer accuracy = 12;
 
-	private static final String[][] zOrder = { { "0", "1", "4", "5", "h", "j", "n", "p" },
-			{ "2", "3", "6", "7", "k", "m", "q", "r" }, { "8", "9", "d", "e", "s", "t", "w", "x" },
-			{ "b", "c", "f", "g", "u", "v", "y", "z" } };
+	private static final String[][] zOrder = {
+			{ "0", "1", "4", "5", "h", "j", "n", "p" },
+			{ "2", "3", "6", "7", "k", "m", "q", "r" },
+			{ "8", "9", "d", "e", "s", "t", "w", "x" },
+			{ "b", "c", "f", "g", "u", "v", "y", "z" }
+	};
 
-	public static int[] getSymbolPosition(String str) {
+	private static final String[][] zOrder2 = {
+			{ "0", "2", "8", "b" },
+			{ "1", "3", "9", "c" },
+			{ "4", "6", "d", "f" },
+			{ "5", "7", "e", "g" },
+			{ "h", "k", "s", "u" },
+			{ "j", "m", "t", "v" },
+			{ "n", "q", "w", "y" },
+			{ "p", "r", "x", "z" }
+	};
+
+	private static String[][] matrix = null;
+
+
+	public static int[] getSymbolPosition(String str, boolean isOdd) {
 		int[] array = new int[2];
-		for (int i = 0; i < zOrder.length; i++) {
-			for (int j = 0; j < zOrder[0].length; j++) {
-				if (str.equals(zOrder[i][j])) {
+
+		if (!isOdd) {
+			matrix = zOrder;
+		}
+		else {
+			matrix = zOrder2;
+		}
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				if (str.equals(matrix[i][j])) {
 					array[0] = j;
-					array[1] = i ;
+					array[1] = i;
 					return array;
+
 				}
 			}
 		}
 		return array;
 	}
 
-	public static List<String> getSymbolsBetween(String s1, String s2) {
-		final int[] symbolPosition1 = getSymbolPosition(s1);
+	public static List<String> getGeoHashesSymbolsBetween(String s1, String s2, boolean isOdd) {
+		String temp;
+		if (!isOdd) {
+			temp = s1;
+			s1 = s2;
+			s2 = temp;
+		}
+		final int[] symbolPosition1 = getSymbolPosition(s1, isOdd);
 		int x1 = symbolPosition1[0];
 		int y1 = symbolPosition1[1];
-		final int[] symbolPosition2 = getSymbolPosition(s2);
+		final int[] symbolPosition2 = getSymbolPosition(s2, isOdd);
 		int x2 = symbolPosition2[0];
 		int y2 = symbolPosition2[1];
 
 		List<String> symbols = new ArrayList<>();
 
-		for (int i = 0; i < zOrder.length; i++) {
-			for (int j = 0; j < zOrder[0].length; j++) {
-				if (i >= x1 && i <= x2 && j >= y2 && j <= y1) {
-					symbols.add(zOrder[i][j]);
+		if (!isOdd) {
+			matrix = zOrder;
+		}
+		else {
+			matrix = zOrder2;
+		}
+
+		for (int i = 0; i < matrix.length; i++) {
+			for (int j = 0; j < matrix[0].length; j++) {
+				if (!isOdd) {
+					if (j >= x1 && j <= x2 && i <= y2 && i >= y1) {
+						symbols.add(matrix[i][j]);
+					}
+				}
+				else {
+					if (j >= x2 && j <= x1 && i <= y1 && i >= y2) {
+						symbols.add(matrix[i][j]);
+					}
 				}
 			}
 		}
 
+		Collections.sort(symbols);
 		return symbols;
 	}
 
-	public static String getCommonGeoHashForCircle(double lat, double longitude, double radius) {
+	public static List<String> getCommonGeoHashForCircle(double lat, double longitude, double radius) {
 
 		double maxLongitude = getLongitude(longitude, radius, lat);
 		double minLongitude = getLongitude(longitude, -radius, lat);
@@ -65,10 +115,10 @@ public class GeoHashUtils {
 		String geoHashForSouthWestPoint = GeoHash.geoHashStringWithCharacterPrecision(minLatitude, minLongitude, accuracy);
 		String geoHashForSouthEastPoint = GeoHash.geoHashStringWithCharacterPrecision(maxLatitude, minLongitude, accuracy);
 
-		System.out.println(geoHashForNorthEastPoint);
-		System.out.println(geoHashForNorthWestPoint);
-		System.out.println(geoHashForSouthWestPoint);
-		System.out.println(geoHashForSouthEastPoint);
+		log.info(geoHashForNorthEastPoint);
+		log.info(geoHashForNorthWestPoint);
+		log.info(geoHashForSouthWestPoint);
+		log.info(geoHashForSouthEastPoint);
 
 		StringBuilder commonGeoHash = new StringBuilder();
 
@@ -82,10 +132,23 @@ public class GeoHashUtils {
 				commonGeoHash.append(ne[i]);
 			}
 			else {
-				return commonGeoHash.toString();
+
+				final String additionalSymbolForNE = geoHashForNorthEastPoint.substring(commonGeoHash.length(),
+						commonGeoHash.length() + 1);
+				final String additionalSymbolForSW = geoHashForSouthWestPoint.substring(commonGeoHash.length(),
+						commonGeoHash.length() + 1);
+
+				boolean isOdd = (commonGeoHash.length()+1) % 2 != 0;
+				final List<String> additionalSymbols = getGeoHashesSymbolsBetween(additionalSymbolForNE, additionalSymbolForSW,
+						isOdd);
+
+				final List<String> geoHashesSymbolsBetween = additionalSymbols.stream().map(x -> commonGeoHash + x)
+						.collect(Collectors.toList());
+
+				return geoHashesSymbolsBetween;
 			}
 		}
-		return commonGeoHash.toString();
+		return Collections.emptyList();
 
 	}
 

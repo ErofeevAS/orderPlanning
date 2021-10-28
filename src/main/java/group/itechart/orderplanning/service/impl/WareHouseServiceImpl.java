@@ -24,7 +24,7 @@ public class WareHouseServiceImpl implements WareHouseService {
 	}
 
 	@Override
-	public List<WareHouse> findByGeoHash(final String geoHash) {
+	public List<WareHouse> findByGeoHash(final List<String> geoHash) {
 //		return wareHouseRepository.findWareHousesByGeoHashAfter(geoHash);
 		return wareHouseRepository.findWareHousesByGeoHash(geoHash);
 	}

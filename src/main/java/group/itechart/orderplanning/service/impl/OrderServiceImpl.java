@@ -24,9 +24,11 @@ import group.itechart.orderplanning.service.OrderService;
 import group.itechart.orderplanning.service.WareHouseService;
 import group.itechart.orderplanning.service.converter.impl.OrderConverter;
 import group.itechart.orderplanning.service.dto.OrderDto;
+import lombok.extern.slf4j.Slf4j;
 
 
 @Service
+@Slf4j
 public class OrderServiceImpl implements OrderService {
 
 	private final OrderRepository orderRepository;
@@ -76,16 +78,17 @@ public class OrderServiceImpl implements OrderService {
 				coordinates.getLongitude(), 12);
 
 		while (wareHouses.isEmpty() && radius < 1000) {
-			System.out.println("------SEARCHING WAREHOUSES IN " + radius + " km radius-------------");
+			log.info("------SEARCHING WAREHOUSES IN {} km radius-------------", radius);
 
-			final String commonGeoHashForCircle = getCommonGeoHashForCircle(coordinates.getLatitude(), coordinates.getLongitude(),
+			final List<String> geoHashes = getCommonGeoHashForCircle(coordinates.getLatitude(), coordinates.getLongitude(),
 					radius);
 
-			wareHouses = wareHouseService.findByGeoHash(commonGeoHashForCircle);
+			wareHouses = wareHouseService.findByGeoHash(geoHashes);
 
-			System.out.println("commonGeoHashForCircle: " + commonGeoHashForCircle);
-			System.out.println("------was found " + wareHouses.size() + " warehouses");
+			log.info("commonGeoHashesForCircle: " + geoHashes);
+			log.info("------was found {} warehouses", wareHouses.size());
 			Map<String, List<WareHouse>> actualWareHouses = new HashMap<>();
+
 			for (WareHouse wareHouse : wareHouses) {
 				final double distance = calculateDistance(wareHouse.getGeoHash(), clientGeoHash);
 				System.out.println("distance " + distance);
@@ -98,7 +101,7 @@ public class OrderServiceImpl implements OrderService {
 					actualWareHouses.put(distanceString, List.of(wareHouse));
 				}
 			}
-			radius *= 6;
+			radius *= 1.4;
 		}
 
 		return null;

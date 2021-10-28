@@ -60,7 +60,12 @@
 <!--			<column name="id" value="2"/>-->
 <!--			<column name="name" value="West"/>-->
 <!--			<column name="city_id" value="3"/>-->
-<!--			<column name="geo_hash" value="u9edemxuz"/>-->
+<!--			<column name="geo_hash" value="u9e59w0z4"/>-->
+<!--			<column name="geo_hash6" value="u9e59w"/>-->
+<!--			<column name="geo_hash5" value="u9e5b"/>-->
+<!--			<column name="geo_hash4" value="u9e5"/>-->
+<!--			<column name="geo_hash3" value="u9e"/>-->
+<!--			<column name="geo_hash2" value="u9"/>-->
 <!--		</insert>-->
 		<insert tableName="ware_house">
 			<column name="id" value="3"/>

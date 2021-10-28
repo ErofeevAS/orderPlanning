@@ -9,5 +9,5 @@ public interface WareHouseService {
 
 	List<WareHouse> findByProductId(final Long productId);
 
-	List<WareHouse> findByGeoHash(String geoHash);
+	List<WareHouse> findByGeoHash(List<String> geoHash);
 }

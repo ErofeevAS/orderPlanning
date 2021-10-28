@@ -21,5 +21,4 @@ public class OrderDto {
 	private Long clientId;
 	private List<OrderEntryDto> orderEntries = new ArrayList<>();
 	private BigDecimal totalPrice;
-	private BigDecimal distance;
 }

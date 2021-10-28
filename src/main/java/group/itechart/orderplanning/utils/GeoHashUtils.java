@@ -54,7 +54,6 @@ public class GeoHashUtils {
 					array[0] = j;
 					array[1] = i;
 					return array;
-
 				}
 			}
 		}
@@ -74,16 +73,13 @@ public class GeoHashUtils {
 		final int[] symbolPosition2 = getSymbolPosition(s2, isOdd);
 		int x2 = symbolPosition2[0];
 		int y2 = symbolPosition2[1];
-
 		List<String> symbols = new ArrayList<>();
-
 		if (!isOdd) {
 			matrix = zOrder;
 		}
 		else {
 			matrix = zOrder2;
 		}
-
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[0].length; j++) {
 				if (!isOdd) {
@@ -138,14 +134,12 @@ public class GeoHashUtils {
 				final String additionalSymbolForSW = geoHashForSouthWestPoint.substring(commonGeoHash.length(),
 						commonGeoHash.length() + 1);
 
-				boolean isOdd = (commonGeoHash.length()+1) % 2 != 0;
+				boolean isOdd = (commonGeoHash.length() + 1) % 2 != 0;
 				final List<String> additionalSymbols = getGeoHashesSymbolsBetween(additionalSymbolForNE, additionalSymbolForSW,
 						isOdd);
 
-				final List<String> geoHashesSymbolsBetween = additionalSymbols.stream().map(x -> commonGeoHash + x)
+				return additionalSymbols.stream().map(additionalSymbol -> commonGeoHash + additionalSymbol)
 						.collect(Collectors.toList());
-
-				return geoHashesSymbolsBetween;
 			}
 		}
 		return Collections.emptyList();

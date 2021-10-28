@@ -33,25 +33,18 @@ public class CustomWareHouseRepositoryImpl implements CustomWareHouseRepository 
 		}
 		final CriteriaBuilder criteriaBuilder = em.getCriteriaBuilder();
 		final CriteriaQuery<WareHouse> criteriaQuery = criteriaBuilder.createQuery(WareHouse.class);
-
 		final Root<WareHouse> wareHouse = criteriaQuery.from(WareHouse.class);
 
-
 		final int geoHashLength = geoHashes.get(0).length();
-		final Predicate predicate;
-
-
-
 
 		if (geoHashLength >= 2 && geoHashLength <= 6) {
-//			predicate = criteriaBuilder.equal(wareHouse.get(columnName + geoHashLength), geoHash);
+
 			criteriaQuery.select(wareHouse).where(wareHouse.get(columnName + geoHashLength).in(geoHashes));
 		}
 		else {
-//			predicate = criteriaBuilder.equal(wareHouse.get(columnName), geoHashes);
 			criteriaQuery.select(wareHouse).where(wareHouse.get(columnName).in(geoHashes));
 		}
-//		criteriaQuery.where(predicate);
+
 		final TypedQuery<WareHouse> query = em.createQuery(criteriaQuery);
 		return query.getResultList();
 	}

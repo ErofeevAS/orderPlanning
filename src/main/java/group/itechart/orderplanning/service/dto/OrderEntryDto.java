@@ -1,5 +1,7 @@
 package group.itechart.orderplanning.service.dto;
 
+import java.math.BigDecimal;
+
 import javax.validation.constraints.NotNull;
 
 import lombok.AllArgsConstructor;
@@ -16,5 +18,11 @@ public class OrderEntryDto {
 	private ProductDto product;
 	@NotNull
 	private Integer amount;
+
+	private BigDecimal price;
+
+	private String wareHouseName;
+
+	private double distance;
 
 }

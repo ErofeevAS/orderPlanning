@@ -1,9 +1,9 @@
-package orderplanning.utils
+package group.orderplanning.utils
 
 import group.itechart.orderplanning.utils.GeoHashUtils
 import spock.lang.Specification
 
-class GeoHashUtilsTest extends Specification {
+class GeoHashUtilsSpec extends Specification {
 
 
     def "should return values between south-west and north-east symbols"(String s1, String s2, boolean isOdd, List<String> result) {

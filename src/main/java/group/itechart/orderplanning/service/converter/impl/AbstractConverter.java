@@ -13,8 +13,9 @@ import group.itechart.orderplanning.service.converter.Converter;
 @Component
 abstract public class AbstractConverter<D,E> implements Converter<D,E> {
 
-	private Class<D> dtoClass = (Class<D>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[0];
-	private Class<E> entityClass = (Class<E>)((ParameterizedType)getClass().getGenericSuperclass()).getActualTypeArguments()[1];
+	private final ParameterizedType genericSuperclass = (ParameterizedType) getClass().getGenericSuperclass();
+	private Class<D> dtoClass = (Class<D>) (genericSuperclass).getActualTypeArguments()[0];
+	private Class<E> entityClass = (Class<E>) (genericSuperclass).getActualTypeArguments()[1];
 
 	protected final ModelMapper modelMapper;
 
@@ -36,6 +37,4 @@ abstract public class AbstractConverter<D,E> implements Converter<D,E> {
 	public List<D> toDtos(final List<E> entities) {
 		return entities.stream().map(this::toDto).collect(Collectors.toList());
 	}
-
-
 }

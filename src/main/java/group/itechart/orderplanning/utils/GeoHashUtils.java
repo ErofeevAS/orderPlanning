@@ -149,7 +149,6 @@ public class GeoHashUtils {
 	private static double getLatitude(double lat1, double distance) {
 		double radius = 6371;
 		return Math.toDegrees(distance / radius) + lat1;
-
 	}
 
 	private static double getLongitude(double longitude, double distance, double lat) {

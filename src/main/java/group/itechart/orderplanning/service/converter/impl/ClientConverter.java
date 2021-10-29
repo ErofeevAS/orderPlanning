@@ -12,26 +12,10 @@ import group.itechart.orderplanning.service.dto.ClientDto;
 
 
 @Component
-public class ClientConverter implements Converter<ClientDto, Client> {
+public class ClientConverter extends AbstractConverter<ClientDto, Client> {
 
-	private final ModelMapper modelMapper;
-
-	public ClientConverter(final ModelMapper modelMapper) {
-		this.modelMapper = modelMapper;
+	protected ClientConverter(final ModelMapper modelMapper) {
+		super(modelMapper);
 	}
 
-	@Override
-	public ClientDto toDto(final Client entity) {
-		return modelMapper.map(entity, ClientDto.class);
-	}
-
-	@Override
-	public Client toEntity(final ClientDto dto) {
-		return modelMapper.map(dto, Client.class);
-	}
-
-	@Override
-	public List<ClientDto> toDtos(final List<Client> entities) {
-		return entities.stream().map(this::toDto).collect(Collectors.toList());
-	}
 }

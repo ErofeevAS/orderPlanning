@@ -4,6 +4,7 @@ import java.util.Collections;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -19,6 +20,7 @@ import group.itechart.orderplanning.repository.entity.WareHouse;
 @Repository
 public class CustomWareHouseRepositoryImpl implements CustomWareHouseRepository {
 
+//	@PersistenceContext
 	private final EntityManager em;
 	private final static String columnName = "geoHash";
 

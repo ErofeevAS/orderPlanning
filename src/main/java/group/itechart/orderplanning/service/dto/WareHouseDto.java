@@ -7,7 +7,6 @@ import lombok.RequiredArgsConstructor;
 
 @Data
 @RequiredArgsConstructor
-@NoArgsConstructor
 public class WareHouseDto {
 
 	private Long id;

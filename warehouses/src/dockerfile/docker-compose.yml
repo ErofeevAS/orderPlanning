@@ -1,0 +1,15 @@
+version: '3.1'
+
+services:
+
+  mongodb:
+    image: mongo:4.4.2
+    container_name: mongodb
+    environment:
+      - PUID=1000
+      - PGID=1000
+    volumes:
+      - ./alex/mongodb/database:/data/db
+    ports:
+      - "27017:27017"
+    restart: unless-stopped

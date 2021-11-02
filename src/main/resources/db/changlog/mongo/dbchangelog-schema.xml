@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+		xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
+		xmlns:pro="http://www.liquibase.org/xml/ns/pro"
+		xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.0.xsd
+http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd
+http://www.liquibase.org/xml/ns/pro http://www.liquibase.org/xml/ns/pro/liquibase-pro-4.0.xsd">
+
+	<changeSet id="1" author="bob">
+		<ext:createCollection collectionName="myCollection">
+			<ext:options>
+				{
+				validator: {
+				$jsonSchema: {
+				bsonType: "object",
+				required: ["name", "address"],
+				properties: {
+				name: {
+				bsonType: "string",
+				description: "The Name"
+				},
+				address: {
+				bsonType: "string",
+				description: "The Address"
+				}
+				}
+				}
+				},
+				validationAction: "warn",
+				validationLevel: "strict"
+				}
+			</ext:options>
+		</ext:createCollection>
+	</changeSet>
+
+	<changeSet id="2" author="Alexei Erofeev">
+		<ext:createCollection collectionName="warehouses">
+			<ext:options>
+				{
+				validator: {
+				$jsonSchema: {
+				bsonType: "object",
+				required: ["name", "address"],
+				properties: {
+				name: {
+				bsonType: "string",
+				description: "The Name"
+				},
+				address: {
+				bsonType: "string",
+				description: "The Address"
+				}
+				}
+				}
+				},
+				validationAction: "warn",
+				validationLevel: "strict"
+				}
+			</ext:options>
+		</ext:createCollection>
+	</changeSet>
+</databaseChangeLog>

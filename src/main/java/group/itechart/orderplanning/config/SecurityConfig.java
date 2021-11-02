@@ -14,7 +14,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers("/").permitAll().anyRequest().authenticated().and().formLogin().disable()
+		http.authorizeRequests().mvcMatchers("/").permitAll().anyRequest().authenticated().and().formLogin().disable()
 				.oauth2ResourceServer().jwt();
 //		.oauth2ResourceServer().opaqueToken();
 	}

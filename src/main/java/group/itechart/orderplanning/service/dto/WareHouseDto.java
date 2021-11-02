@@ -1,13 +1,11 @@
 package group.itechart.orderplanning.service.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 
 @Data
 @RequiredArgsConstructor
-@NoArgsConstructor
 public class WareHouseDto {
 
 	private Long id;

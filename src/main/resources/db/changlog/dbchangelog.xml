@@ -8,4 +8,7 @@
 	<include file="db/changlog/dbchangelog-schema.xml"/>
 	<include file="db/changlog/init_data_changelog.xml"/>
 
+	<include file="db/changlog/mongo/dbchangelog-schema.xml"/>
+	<include file="db/changlog/mongo/init_data_changelog.xml"/>
+
 </databaseChangeLog>

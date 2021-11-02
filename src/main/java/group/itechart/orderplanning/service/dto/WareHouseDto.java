@@ -1,7 +1,6 @@
 package group.itechart.orderplanning.service.dto;
 
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
 
 

@@ -6,7 +6,6 @@ import static java.util.Objects.isNull;
 import static java.util.Objects.nonNull;
 import static org.apache.commons.collections4.ListUtils.emptyIfNull;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -14,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 
 import org.springframework.stereotype.Service;
@@ -29,6 +29,8 @@ import group.itechart.orderplanning.repository.entity.OrderEntry;
 import group.itechart.orderplanning.repository.entity.Product;
 import group.itechart.orderplanning.repository.entity.StockLevel;
 import group.itechart.orderplanning.repository.entity.WareHouse;
+import group.itechart.orderplanning.rest.document.WareHouseDocument;
+import group.itechart.orderplanning.rest.service.WareHouseRestTemplateService;
 import group.itechart.orderplanning.service.OrderService;
 import group.itechart.orderplanning.service.WareHouseService;
 import group.itechart.orderplanning.service.converter.impl.OrderConverter;
@@ -51,15 +53,17 @@ public class OrderServiceImpl implements OrderService {
 	private final ClientRepository clientRepository;
 	private final WareHouseService wareHouseService;
 	private final ProductRepository productRepository;
+	private final WareHouseRestTemplateService wareHouseRestTemplateService;
 
 	public OrderServiceImpl(final OrderRepository orderRepository, final OrderConverter orderConverter,
 			final ClientRepository clientRepository, final WareHouseService wareHouseService,
-			final ProductRepository productRepository) {
+			final ProductRepository productRepository, final WareHouseRestTemplateService wareHouseRestTemplateService) {
 		this.orderRepository = orderRepository;
 		this.orderConverter = orderConverter;
 		this.clientRepository = clientRepository;
 		this.wareHouseService = wareHouseService;
 		this.productRepository = productRepository;
+		this.wareHouseRestTemplateService = wareHouseRestTemplateService;
 	}
 
 	@Override
@@ -99,7 +103,7 @@ public class OrderServiceImpl implements OrderService {
 		for (OrderEntryDto orderEntryDto : orderEntriesDto) {
 			final Long productId = orderEntryDto.getProduct().getId();
 			final Product product = productRepository.findById(productId)
-					.orElseThrow(() -> new RuntimeException("product not found, id" + productId));
+					.orElseThrow(() -> new EntityNotFoundException("product not found, id" + productId));
 			final int productAmount = orderEntryDto.getAmount();
 
 			double radius = INIT_RADIUS;
@@ -110,6 +114,9 @@ public class OrderServiceImpl implements OrderService {
 
 				final List<String> geoHashes = getCommonGeoHashForCircle(clientCoordinates.getLatitude(),
 						clientCoordinates.getLongitude(), radius);
+
+				final List<WareHouseDocument> wareHouseDocuments = wareHouseRestTemplateService.find(
+						clientCoordinates.getLatitude(), clientCoordinates.getLongitude(), radius);
 
 				wareHouses = wareHouseService.findByGeoHash(geoHashes);
 

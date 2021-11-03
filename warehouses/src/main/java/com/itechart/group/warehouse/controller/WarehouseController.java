@@ -21,10 +21,15 @@ public class WarehouseController {
 		this.wareHouseService = wareHouseService;
 	}
 
-	@GetMapping
+	@GetMapping("/nearest")
 	public List<WareHouseDocument> getWareHouses(@RequestParam double lat, @RequestParam double lon,
 			@RequestParam double radius) {
 		return wareHouseService.findWareHousesInRadius(lat, lon, radius);
+	}
+
+	@GetMapping
+	public List<WareHouseDocument> findAll() {
+		return wareHouseService.findAll();
 	}
 
 }

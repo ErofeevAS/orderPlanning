@@ -38,4 +38,10 @@ public class WareHouseServiceImpl implements WareHouseService {
 
 		return mongoTemplate.find(query, WareHouseDocument.class);
 	}
+
+	@Override
+	public List<WareHouseDocument> findAll() {
+		return repository.findAll();
+	}
+
 }

@@ -18,7 +18,6 @@ import lombok.Setter;
 
 
 @Entity
-//@Embeddable
 @Getter
 @Setter
 @NoArgsConstructor

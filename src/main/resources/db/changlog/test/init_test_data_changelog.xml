@@ -44,10 +44,11 @@
 
 	</changeSet>
 
+
 	<changeSet author="Alexei.Erofeev" id="1-3">
 		<insert tableName="ware_house">
 			<column name="id" value="1"/>
-			<column name="name" value="Central"/>
+			<column name="name" value="test1"/>
 			<column name="city_id" value="3"/>
 			<column name="geo_hash" value="u9dgxs4gu"/>
 			<column name="geo_hash6" value="u9dgxs"/>
@@ -55,27 +56,21 @@
 			<column name="geo_hash4" value="u9dg"/>
 			<column name="geo_hash3" value="u9d"/>
 			<column name="geo_hash2" value="u9"/>
-<!--			<column name="geo_hash" value="u9e5zx431"/>-->
-<!--			<column name="geo_hash6" value="u9e5zx"/>-->
-<!--			<column name="geo_hash5" value="u9e5z"/>-->
-<!--			<column name="geo_hash4" value="u9e5"/>-->
-<!--			<column name="geo_hash3" value="u9e"/>-->
-<!--			<column name="geo_hash2" value="u9"/>-->
 		</insert>
-<!--		<insert tableName="ware_house">-->
-<!--			<column name="id" value="2"/>-->
-<!--			<column name="name" value="West"/>-->
-<!--			<column name="city_id" value="3"/>-->
-<!--			<column name="geo_hash" value="u9e59w0z4"/>-->
-<!--			<column name="geo_hash6" value="u9e59w"/>-->
-<!--			<column name="geo_hash5" value="u9e5b"/>-->
-<!--			<column name="geo_hash4" value="u9e5"/>-->
-<!--			<column name="geo_hash3" value="u9e"/>-->
-<!--			<column name="geo_hash2" value="u9"/>-->
-<!--		</insert>-->
+		<!--		<insert tableName="ware_house">-->
+		<!--			<column name="id" value="2"/>-->
+		<!--			<column name="name" value="West"/>-->
+		<!--			<column name="city_id" value="3"/>-->
+		<!--			<column name="geo_hash" value="u9e59w0z4"/>-->
+		<!--			<column name="geo_hash6" value="u9e59w"/>-->
+		<!--			<column name="geo_hash5" value="u9e5b"/>-->
+		<!--			<column name="geo_hash4" value="u9e5"/>-->
+		<!--			<column name="geo_hash3" value="u9e"/>-->
+		<!--			<column name="geo_hash2" value="u9"/>-->
+		<!--		</insert>-->
 		<insert tableName="ware_house">
 			<column name="id" value="3"/>
-			<column name="name" value="North-East"/>
+			<column name="name" value="test2"/>
 			<column name="city_id" value="3"/>
 			<column name="geo_hash" value="u9e5r3ts"/>
 			<column name="geo_hash6" value="u9e5r3"/>
@@ -86,7 +81,7 @@
 		</insert>
 		<insert tableName="ware_house">
 			<column name="id" value="4"/>
-			<column name="name" value="North-East2"/>
+			<column name="name" value="test3"/>
 			<column name="city_id" value="3"/>
 			<column name="geo_hash" value="u9e5pe7jx"/>
 			<column name="geo_hash6" value="u9e5pe"/>

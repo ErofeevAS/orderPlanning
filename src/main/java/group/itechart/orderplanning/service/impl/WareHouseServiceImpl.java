@@ -1,10 +1,13 @@
 package group.itechart.orderplanning.service.impl;
 
+import static group.itechart.orderplanning.utils.GeoHashUtils.getCommonGeoHashForCircle;
+
 import java.util.List;
 
 import org.springframework.stereotype.Service;
 
 import group.itechart.orderplanning.repository.WareHouseRepository;
+import group.itechart.orderplanning.repository.entity.Coordinates;
 import group.itechart.orderplanning.repository.entity.WareHouse;
 import group.itechart.orderplanning.service.WareHouseService;
 
@@ -24,8 +27,10 @@ public class WareHouseServiceImpl implements WareHouseService {
 	}
 
 	@Override
-	public List<WareHouse> findByGeoHash(final List<String> geoHash) {
-		return wareHouseRepository.findWareHousesByGeoHash(geoHash);
+	public List<WareHouse> findWareHousesInRadius(final Coordinates clientCoordinates, final double radius, int accuracy) {
+		final List<String> geoHashes = getCommonGeoHashForCircle(clientCoordinates.getLatitude(),
+				clientCoordinates.getLongitude(), radius,accuracy);
+		return wareHouseRepository.findWareHousesByGeoHash(geoHashes);
 	}
 
 }

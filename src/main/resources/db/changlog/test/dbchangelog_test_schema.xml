@@ -1,0 +1,155 @@
+<?xml version="1.1" encoding="UTF-8" standalone="no"?>
+
+<databaseChangeLog xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+                   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+                   xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+                    http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.1.xsd">
+
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-1">
+		<createTable tableName="city">
+			<column autoIncrement="true" name="id" type="BIGINT">
+				<constraints nullable="false" primaryKey="true"/>
+			</column>
+			<column name="latitude" type="DOUBLE"/>
+			<column name="longitude" type="DOUBLE"/>
+			<column name="name" type="VARCHAR(255)"/>
+		</createTable>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-2">
+		<createTable tableName="client">
+			<column autoIncrement="true" name="id" type="BIGINT">
+				<constraints nullable="false" primaryKey="true"/>
+			</column>
+			<column name="name" type="VARCHAR(255)">
+				<constraints unique="true"/>
+			</column>
+			<column name="city_id" type="BIGINT"/>
+		</createTable>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-3">
+		<createTable tableName="order_entry">
+			<column autoIncrement="true" name="id" type="BIGINT">
+				<constraints nullable="false" primaryKey="true"/>
+			</column>
+			<column name="amount" type="INT"/>
+			<column name="distance" type="DOUBLE"/>
+			<column name="order_id" type="BIGINT"/>
+			<column name="product_id" type="BIGINT"/>
+			<column name="ware_house_id" type="BIGINT"/>
+		</createTable>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-4">
+		<createTable tableName="orders">
+			<column autoIncrement="true" name="id" type="BIGINT">
+				<constraints nullable="false" primaryKey="true"/>
+			</column>
+			<column name="client_id" type="BIGINT"/>
+		</createTable>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-5">
+		<createTable tableName="product">
+			<column autoIncrement="true" name="id" type="BIGINT">
+				<constraints nullable="false" primaryKey="true"/>
+			</column>
+			<column name="name" type="VARCHAR(255)"/>
+			<column name="price" type="DECIMAL(19, 2)"/>
+		</createTable>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-6">
+		<createTable tableName="stock_level">
+			<column autoIncrement="true" name="id" type="BIGINT">
+				<constraints nullable="false" primaryKey="true"/>
+			</column>
+			<column name="amount" type="INT"/>
+			<column name="product_id" type="BIGINT"/>
+			<column name="ware_house_id" type="BIGINT"/>
+		</createTable>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-7">
+		<createTable tableName="ware_house">
+			<column autoIncrement="true" name="id" type="BIGINT">
+				<constraints nullable="false" primaryKey="true"/>
+			</column>
+			<column name="geo_hash" type="VARCHAR(255)"/>
+			<column name="geo_hash2" type="VARCHAR(255)"/>
+			<column name="geo_hash3" type="VARCHAR(255)"/>
+			<column name="geo_hash4" type="VARCHAR(255)"/>
+			<column name="geo_hash5" type="VARCHAR(255)"/>
+			<column name="geo_hash6" type="VARCHAR(255)"/>
+			<column name="name" type="VARCHAR(255)"/>
+			<column name="city_id" type="BIGINT"/>
+		</createTable>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-8">
+		<createIndex indexName="FK17yo6gry2nuwg2erwhbaxqbs9" tableName="orders">
+			<column name="client_id"/>
+		</createIndex>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-9">
+		<createIndex indexName="FK320jqnq779wg0g6cbaesssm99" tableName="order_entry">
+			<column name="order_id"/>
+		</createIndex>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-10">
+		<createIndex indexName="FK4dk4v5hcfu0d1ickbl7lr459n" tableName="order_entry">
+			<column name="ware_house_id"/>
+		</createIndex>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-11">
+		<createIndex indexName="FK7xmv9oheciw8wus8bb5cpbf1c" tableName="order_entry">
+			<column name="product_id"/>
+		</createIndex>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-12">
+		<createIndex indexName="FK9momxhqx13wx2gsbw6n1s2uxs" tableName="ware_house">
+			<column name="city_id"/>
+		</createIndex>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-13">
+		<createIndex indexName="FKb6vnkgejdwd8v5e6mhr3gyfn2" tableName="stock_level">
+			<column name="ware_house_id"/>
+		</createIndex>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-14">
+		<createIndex indexName="FKfedq204xtybi8usr8gyeinm6m" tableName="stock_level">
+			<column name="product_id"/>
+		</createIndex>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-16">
+		<createIndex indexName="FKkb5fr3nx3qucrbme4wewcmwbf" tableName="client">
+			<column name="city_id"/>
+		</createIndex>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-17">
+		<addForeignKeyConstraint baseColumnNames="client_id" baseTableName="orders" constraintName="FK17yo6gry2nuwg2erwhbaxqbs9" deferrable="false" initiallyDeferred="false"
+		                         onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="client" validate="true"/>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-18">
+		<addForeignKeyConstraint baseColumnNames="order_id" baseTableName="order_entry" constraintName="FK320jqnq779wg0g6cbaesssm99" deferrable="false" initiallyDeferred="false"
+		                         onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="orders" validate="true"/>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-19">
+		<addForeignKeyConstraint baseColumnNames="ware_house_id" baseTableName="order_entry" constraintName="FK4dk4v5hcfu0d1ickbl7lr459n" deferrable="false"
+		                         initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="ware_house" validate="true"/>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-20">
+		<addForeignKeyConstraint baseColumnNames="product_id" baseTableName="order_entry" constraintName="FK7xmv9oheciw8wus8bb5cpbf1c" deferrable="false" initiallyDeferred="false"
+		                         onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="product" validate="true"/>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-21">
+		<addForeignKeyConstraint baseColumnNames="city_id" baseTableName="ware_house" constraintName="FK9momxhqx13wx2gsbw6n1s2uxs" deferrable="false" initiallyDeferred="false"
+		                         onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="city" validate="true"/>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-22">
+		<addForeignKeyConstraint baseColumnNames="ware_house_id" baseTableName="stock_level" constraintName="FKb6vnkgejdwd8v5e6mhr3gyfn2" deferrable="false"
+		                         initiallyDeferred="false" onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="ware_house" validate="true"/>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-23">
+		<addForeignKeyConstraint baseColumnNames="product_id" baseTableName="stock_level" constraintName="FKfedq204xtybi8usr8gyeinm6m" deferrable="false" initiallyDeferred="false"
+		                         onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="product" validate="true"/>
+	</changeSet>
+	<changeSet author="Alexei.Erofeev (generated)" id="1635431293049-25">
+		<addForeignKeyConstraint baseColumnNames="city_id" baseTableName="client" constraintName="FKkb5fr3nx3qucrbme4wewcmwbf" deferrable="false" initiallyDeferred="false"
+		                         onDelete="NO ACTION" onUpdate="NO ACTION" referencedColumnNames="id" referencedTableName="city" validate="true"/>
+	</changeSet>
+</databaseChangeLog>

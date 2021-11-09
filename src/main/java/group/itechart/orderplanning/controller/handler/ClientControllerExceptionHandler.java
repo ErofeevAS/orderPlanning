@@ -1,4 +1,6 @@
-package group.itechart.orderplanning.controller;
+package group.itechart.orderplanning.controller.handler;
+
+import javax.persistence.EntityNotFoundException;
 
 import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.http.HttpHeaders;
@@ -13,7 +15,7 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 @ControllerAdvice
 public class ClientControllerExceptionHandler extends ResponseEntityExceptionHandler {
 
-	@ExceptionHandler(value = { ConstraintViolationException.class })
+	@ExceptionHandler(value = { ConstraintViolationException.class, EntityNotFoundException.class })
 	protected ResponseEntity<Object> handleConflict(RuntimeException ex, WebRequest request) {
 		return handleExceptionInternal(ex, ex.getMessage(), new HttpHeaders(), HttpStatus.CONFLICT, request);
 	}

@@ -1,11 +1,16 @@
 package group.itechart.orderplanning.utils;
 
+import static org.apache.commons.collections4.ListUtils.emptyIfNull;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import ch.hsr.geohash.BoundingBox;
 import ch.hsr.geohash.GeoHash;
+import ch.hsr.geohash.WGS84Point;
+import ch.hsr.geohash.queries.GeoHashCircleQuery;
 import lombok.extern.slf4j.Slf4j;
 
 
@@ -16,7 +21,7 @@ public class GeoHashUtils {
 		throw new UnsupportedOperationException();
 	}
 
-	private static final Integer accuracy = 12;
+	private static final Integer accuracy = 9;
 
 	private static final String[][] zOrder = {
 			{ "0", "1", "4", "5", "h", "j", "n", "p" },
@@ -25,7 +30,7 @@ public class GeoHashUtils {
 			{ "b", "c", "f", "g", "u", "v", "y", "z" }
 	};
 
-	private static final String[][] zOrder2 = {
+	private static final String[][] zOrderInverse = {
 			{ "0", "2", "8", "b" },
 			{ "1", "3", "9", "c" },
 			{ "4", "6", "d", "f" },
@@ -46,7 +51,7 @@ public class GeoHashUtils {
 			matrix = zOrder;
 		}
 		else {
-			matrix = zOrder2;
+			matrix = zOrderInverse;
 		}
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[0].length; j++) {
@@ -78,7 +83,7 @@ public class GeoHashUtils {
 			matrix = zOrder;
 		}
 		else {
-			matrix = zOrder2;
+			matrix = zOrderInverse;
 		}
 		for (int i = 0; i < matrix.length; i++) {
 			for (int j = 0; j < matrix[0].length; j++) {
@@ -99,50 +104,60 @@ public class GeoHashUtils {
 		return symbols;
 	}
 
-	public static List<String> getCommonGeoHashForCircle(double lat, double longitude, double radius) {
+	private static String convertWGS84PointToGeoHash(WGS84Point point, int accuracy) {
+		return GeoHash.geoHashStringWithCharacterPrecision(point.getLatitude(), point.getLongitude(), accuracy);
+	}
 
-		double maxLongitude = getLongitude(longitude, radius, lat);
-		double minLongitude = getLongitude(longitude, -radius, lat);
-		double maxLatitude = getLatitude(lat, radius);
-		double minLatitude = getLatitude(lat, -radius);
+	public static List<String> getCommonGeoHashForCircle(double lat, double longitude, double radius, int accuracy) {
+		final WGS84Point center = new WGS84Point(lat, longitude);
+		GeoHashCircleQuery circleQuery = new GeoHashCircleQuery(center, 1000 * radius);
+		final List<GeoHash> searchHashes = circleQuery.getSearchHashes();
+		return emptyIfNull(searchHashes).stream().map(hash -> convertWGS84PointToGeoHash(hash.getOriginatingPoint(), accuracy))
+				.collect(Collectors.toList());
 
-		String geoHashForNorthEastPoint = GeoHash.geoHashStringWithCharacterPrecision(maxLatitude, maxLongitude, accuracy);
-		String geoHashForNorthWestPoint = GeoHash.geoHashStringWithCharacterPrecision(minLatitude, maxLongitude, accuracy);
-		String geoHashForSouthWestPoint = GeoHash.geoHashStringWithCharacterPrecision(minLatitude, minLongitude, accuracy);
-		String geoHashForSouthEastPoint = GeoHash.geoHashStringWithCharacterPrecision(maxLatitude, minLongitude, accuracy);
 
-		log.info(geoHashForNorthEastPoint);
-		log.info(geoHashForNorthWestPoint);
-		log.info(geoHashForSouthWestPoint);
-		log.info(geoHashForSouthEastPoint);
-
-		StringBuilder commonGeoHash = new StringBuilder();
-
-		final char[] ne = geoHashForNorthEastPoint.toCharArray();
-		for (int i = 0; i < ne.length; i++) {
-			final char nw = geoHashForNorthWestPoint.charAt(i);
-			final char sw = geoHashForSouthWestPoint.charAt(i);
-			final char se = geoHashForSouthEastPoint.charAt(i);
-
-			if (ne[i] == nw && sw == se && nw == se) {
-				commonGeoHash.append(ne[i]);
-			}
-			else {
-
-				final String additionalSymbolForNE = geoHashForNorthEastPoint.substring(commonGeoHash.length(),
-						commonGeoHash.length() + 1);
-				final String additionalSymbolForSW = geoHashForSouthWestPoint.substring(commonGeoHash.length(),
-						commonGeoHash.length() + 1);
-
-				boolean isOdd = (commonGeoHash.length() + 1) % 2 != 0;
-				final List<String> additionalSymbols = getGeoHashesSymbolsBetween(additionalSymbolForNE, additionalSymbolForSW,
-						isOdd);
-
-				return additionalSymbols.stream().map(additionalSymbol -> commonGeoHash + additionalSymbol)
-						.collect(Collectors.toList());
-			}
-		}
-		return Collections.emptyList();
+//		double maxLongitude = getLongitude(longitude, radius, lat);
+//		double minLongitude = getLongitude(longitude, -radius, lat);
+//		double maxLatitude = getLatitude(lat, radius);
+//		double minLatitude = getLatitude(lat, -radius);
+//
+//		String geoHashForNorthEastPoint = GeoHash.geoHashStringWithCharacterPrecision(maxLatitude, maxLongitude, accuracy);
+//		String geoHashForNorthWestPoint = GeoHash.geoHashStringWithCharacterPrecision(minLatitude, maxLongitude, accuracy);
+//		String geoHashForSouthWestPoint = GeoHash.geoHashStringWithCharacterPrecision(minLatitude, minLongitude, accuracy);
+//		String geoHashForSouthEastPoint = GeoHash.geoHashStringWithCharacterPrecision(maxLatitude, minLongitude, accuracy);
+//
+//		log.debug(geoHashForNorthEastPoint);
+//		log.debug(geoHashForNorthWestPoint);
+//		log.debug(geoHashForSouthWestPoint);
+//		log.debug(geoHashForSouthEastPoint);
+//
+//		StringBuilder commonGeoHash = new StringBuilder();
+//
+//		final char[] ne = geoHashForNorthEastPoint.toCharArray();
+//		for (int i = 0; i < ne.length; i++) {
+//			final char nw = geoHashForNorthWestPoint.charAt(i);
+//			final char sw = geoHashForSouthWestPoint.charAt(i);
+//			final char se = geoHashForSouthEastPoint.charAt(i);
+//
+//			if (ne[i] == nw && sw == se && nw == se) {
+//				commonGeoHash.append(ne[i]);
+//			}
+//			else {
+//
+//				final String additionalSymbolForNE = geoHashForNorthEastPoint.substring(commonGeoHash.length(),
+//						commonGeoHash.length() + 1);
+//				final String additionalSymbolForSW = geoHashForSouthWestPoint.substring(commonGeoHash.length(),
+//						commonGeoHash.length() + 1);
+//
+//				boolean isOdd = (commonGeoHash.length() + 1) % 2 != 0;
+//				final List<String> additionalSymbols = getGeoHashesSymbolsBetween(additionalSymbolForNE, additionalSymbolForSW,
+//						isOdd);
+//
+//				return additionalSymbols.stream().map(additionalSymbol -> commonGeoHash + additionalSymbol)
+//						.collect(Collectors.toList());
+//			}
+//		}
+//		return Collections.emptyList();
 
 	}
 

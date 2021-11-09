@@ -16,7 +16,6 @@ import group.itechart.orderplanning.service.converter.impl.ClientConverter;
 import group.itechart.orderplanning.service.dto.ClientDto;
 
 
-//Must have @Transactional
 @Service
 public class ClientServiceImpl implements ClientService {
 

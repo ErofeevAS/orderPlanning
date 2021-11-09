@@ -29,8 +29,6 @@ import group.itechart.orderplanning.repository.entity.OrderEntry;
 import group.itechart.orderplanning.repository.entity.Product;
 import group.itechart.orderplanning.repository.entity.StockLevel;
 import group.itechart.orderplanning.repository.entity.WareHouse;
-import group.itechart.orderplanning.rest.document.WareHouseDocument;
-import group.itechart.orderplanning.rest.service.WareHouseRestTemplateService;
 import group.itechart.orderplanning.service.OrderService;
 import group.itechart.orderplanning.service.WareHouseService;
 import group.itechart.orderplanning.service.converter.impl.OrderConverter;
@@ -44,26 +42,26 @@ import lombok.extern.slf4j.Slf4j;
 public class OrderServiceImpl implements OrderService {
 
 	private final static int MAX_RADIUS = 1000;
-	private final static int GEO_HASH_ACCURACY = 12;
+	private final static int GEO_HASH_ACCURACY = 9;
 	private final static double INIT_RADIUS = 0.1;
 	private final static double RADIUS_MULTIPLICATION = 1.4;
+//	private final static double[] radiuses = { 0.5, 6, 20, 80, 600, 2500 };
+	private final static double[] radiuses = { 6, 20, 80, 600, 2500 };
 
 	private final OrderRepository orderRepository;
 	private final OrderConverter orderConverter;
 	private final ClientRepository clientRepository;
 	private final WareHouseService wareHouseService;
 	private final ProductRepository productRepository;
-	private final WareHouseRestTemplateService wareHouseRestTemplateService;
 
 	public OrderServiceImpl(final OrderRepository orderRepository, final OrderConverter orderConverter,
 			final ClientRepository clientRepository, final WareHouseService wareHouseService,
-			final ProductRepository productRepository, final WareHouseRestTemplateService wareHouseRestTemplateService) {
+			final ProductRepository productRepository) {
 		this.orderRepository = orderRepository;
 		this.orderConverter = orderConverter;
 		this.clientRepository = clientRepository;
 		this.wareHouseService = wareHouseService;
 		this.productRepository = productRepository;
-		this.wareHouseRestTemplateService = wareHouseRestTemplateService;
 	}
 
 	@Override
@@ -74,7 +72,7 @@ public class OrderServiceImpl implements OrderService {
 
 		final Optional<Client> optionalClient = clientRepository.findById(clientId);
 
-		final Client client = optionalClient.orElseThrow(() -> new RuntimeException("client not found, id: " + clientId));
+		final Client client = optionalClient.orElseThrow(() -> new EntityNotFoundException("client not found, id: " + clientId));
 
 		final List<OrderEntryDto> orderEntriesDto = orderDto.getOrderEntries();
 
@@ -82,8 +80,6 @@ public class OrderServiceImpl implements OrderService {
 		Order order = new Order();
 		order.setOrderEntries(orderEntries);
 		order.setClient(client);
-
-
 		final Order savedOrder = orderRepository.save(order);
 
 		return orderConverter.toDto(savedOrder);
@@ -93,7 +89,6 @@ public class OrderServiceImpl implements OrderService {
 		if (orderEntriesDto.isEmpty() || isNull(client)) {
 			return Collections.emptyList();
 		}
-
 		List<OrderEntry> orderEntries = new ArrayList<>();
 
 		final Coordinates clientCoordinates = client.getCity().getCoordinates();
@@ -106,34 +101,7 @@ public class OrderServiceImpl implements OrderService {
 					.orElseThrow(() -> new EntityNotFoundException("product not found, id" + productId));
 			final int productAmount = orderEntryDto.getAmount();
 
-			double radius = INIT_RADIUS;
-			List<WareHouse> wareHouses = new ArrayList<>();
-
-			while (wareHouses.isEmpty() && radius < MAX_RADIUS) {
-				log.info("------SEARCHING WAREHOUSES IN {} km radius-------------", radius);
-
-				final List<String> geoHashes = getCommonGeoHashForCircle(clientCoordinates.getLatitude(),
-						clientCoordinates.getLongitude(), radius);
-
-				final List<WareHouseDocument> wareHouseDocuments = wareHouseRestTemplateService.find(
-						clientCoordinates.getLatitude(), clientCoordinates.getLongitude(), radius);
-
-				wareHouses = wareHouseService.findByGeoHash(geoHashes);
-
-				log.info("commonGeoHashesForCircle: " + geoHashes);
-				log.info("------were found {} warehouses", wareHouses.size());
-
-				wareHouses =
-						wareHouses.stream()
-								.map(WareHouse::getStockLevels)
-								.flatMap(Collection::stream)
-								.filter(sl -> sl.getProduct().getId().equals(productId))
-								.filter(sl -> sl.getAmount() >= productAmount)
-						.map(StockLevel::getWareHouse).collect(Collectors.toList());
-
-
-				radius *= RADIUS_MULTIPLICATION;
-			}
+			List<WareHouse>  wareHouses = getWareHousesInCoordinates(clientCoordinates, productId, productAmount);
 
 			WareHouse nearestWareHouse = findNearestWareHouse(wareHouses, clientGeoHash);
 
@@ -142,11 +110,39 @@ public class OrderServiceImpl implements OrderService {
 				OrderEntry orderEntry = createOrderEntry(product, productAmount, nearestWareHouse, distance);
 				orderEntries.add(orderEntry);
 			}
-
-
 		}
-
 		return orderEntries;
+	}
+
+	private List<WareHouse> getWareHousesInCoordinates(final Coordinates clientCoordinates, final Long productId,
+			final int productAmount) {
+		double radius = INIT_RADIUS;
+		List<WareHouse> wareHouses = new ArrayList<>();
+		int accuracy = 6;
+
+		//		while (wareHouses.isEmpty() && radius < MAX_RADIUS) {
+		for (int i = 0; i < radiuses[i]; i++) {
+			radius = radiuses[i];
+			log.debug("------SEARCHING WAREHOUSES IN {} km radius-------------", radius);
+			accuracy--;
+			wareHouses = wareHouseService.findWareHousesInRadius(clientCoordinates, radius, accuracy);
+			log.debug("------were found {} warehouses", wareHouses.size());
+			wareHouses = filterWareHousesByProductAvailability(productId, productAmount, wareHouses);
+			//			radius *= RADIUS_MULTIPLICATION;
+			if (!wareHouses.isEmpty()) {
+				return wareHouses;
+			}
+		}
+		return wareHouses;
+	}
+
+	private List<WareHouse> filterWareHousesByProductAvailability(final Long productId, final int productAmount, final List<WareHouse> wareHouses) {
+		return wareHouses.stream()
+				.map(WareHouse::getStockLevels)
+				.flatMap(Collection::stream)
+				.filter(sl -> sl.getProduct().getId().equals(productId))
+				.filter(sl -> sl.getAmount() >= productAmount)
+		.map(StockLevel::getWareHouse).collect(Collectors.toList());
 	}
 
 	private OrderEntry createOrderEntry(Product product, final int productAmount, final WareHouse nearestWareHouse,
@@ -156,9 +152,6 @@ public class OrderServiceImpl implements OrderService {
 		orderEntry.setProduct(product);
 		orderEntry.setWareHouse(nearestWareHouse);
 		orderEntry.setDistance(distance);
-		//should be another service for expansion
-//		BigDecimal price = product.getPrice().multiply(BigDecimal.valueOf(productAmount));
-//		orderEntry.setPrice(price);
 		return orderEntry;
 	}
 

@@ -2,7 +2,6 @@ package group.itechart.orderplanning.controller;
 
 import javax.validation.Valid;
 
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -25,7 +24,6 @@ public class OrderController {
 	}
 
 	@PostMapping
-	@PreAuthorize("hasAnyAuthority('admin, user')")
 	public OrderDto createOrder(@Valid @RequestBody OrderDto orderDto) {
 		return orderService.createOrder(orderDto);
 	}

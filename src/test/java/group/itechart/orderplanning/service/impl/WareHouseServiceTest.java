@@ -27,7 +27,7 @@ import group.itechart.orderplanning.service.WareHouseService;
 @Testcontainers
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(value = { "classpath:application-test.properties" })
-@ActiveProfiles({"test"})
+@ActiveProfiles({ "test" })
 public class WareHouseServiceTest extends BaseContainerTest {
 
 	@Autowired
@@ -35,12 +35,12 @@ public class WareHouseServiceTest extends BaseContainerTest {
 
 	@ParameterizedTest
 	@MethodSource("providedRadiuses")
-	public void shouldFindNearestWareHouseInRadius(double radius, double amount, List<String> names) {
+	public void shouldFindNearestWareHouseInRadius(double radius, double amount, List<String> names, int accuracy) {
 		final double lat = 54.076235825729185;
 		final double lon = 26.783177389068793;
 		final Coordinates coordinates = new Coordinates(lat, lon);
 
-		final List<WareHouse> wareHouses = wareHouseService.findWareHousesInRadius(coordinates, radius,9);
+		final List<WareHouse> wareHouses = wareHouseService.findWareHousesInRadius(coordinates, radius, accuracy);
 
 		assertEquals(amount, wareHouses.size());
 		final List<String> warehousesNames = wareHouses.stream().map(WareHouse::getName).collect(Collectors.toList());
@@ -49,8 +49,8 @@ public class WareHouseServiceTest extends BaseContainerTest {
 
 	private static Stream<Arguments> providedRadiuses() {
 		List<String> names1 = Collections.emptyList();
-		List<String> names2 = List.of("test1", "test2", "test3");
-		return Stream.of(Arguments.of(1, 0, names1), Arguments.of(20, 3, names2));
+		List<String> names2 = List.of("test2", "test3");
+		return Stream.of(Arguments.of(1, 0, names1, 6), Arguments.of(20, 2, names2, 4));
 	}
 
 }

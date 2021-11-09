@@ -55,24 +55,7 @@
 			<column name="geo_hash4" value="u9dg"/>
 			<column name="geo_hash3" value="u9d"/>
 			<column name="geo_hash2" value="u9"/>
-<!--			<column name="geo_hash" value="u9e5zx431"/>-->
-<!--			<column name="geo_hash6" value="u9e5zx"/>-->
-<!--			<column name="geo_hash5" value="u9e5z"/>-->
-<!--			<column name="geo_hash4" value="u9e5"/>-->
-<!--			<column name="geo_hash3" value="u9e"/>-->
-<!--			<column name="geo_hash2" value="u9"/>-->
 		</insert>
-<!--		<insert tableName="ware_house">-->
-<!--			<column name="id" value="2"/>-->
-<!--			<column name="name" value="West"/>-->
-<!--			<column name="city_id" value="3"/>-->
-<!--			<column name="geo_hash" value="u9e59w0z4"/>-->
-<!--			<column name="geo_hash6" value="u9e59w"/>-->
-<!--			<column name="geo_hash5" value="u9e5b"/>-->
-<!--			<column name="geo_hash4" value="u9e5"/>-->
-<!--			<column name="geo_hash3" value="u9e"/>-->
-<!--			<column name="geo_hash2" value="u9"/>-->
-<!--		</insert>-->
 		<insert tableName="ware_house">
 			<column name="id" value="3"/>
 			<column name="name" value="North-East"/>

@@ -14,7 +14,7 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.TestPropertySource;
 import org.testcontainers.junit.jupiter.Testcontainers;
 
-import group.itechart.orderplanning.service.OrderService;
+import group.itechart.orderplanning.facade.OrderFacade;
 import group.itechart.orderplanning.service.dto.OrderDto;
 import group.itechart.orderplanning.service.dto.OrderEntryDto;
 import group.itechart.orderplanning.service.dto.ProductDto;
@@ -28,13 +28,13 @@ import group.itechart.orderplanning.service.dto.ProductDto;
 public class OrderServiceTest extends BaseContainerTest {
 
 	@Autowired
-	private OrderService orderService;
+	private OrderFacade orderFacade;
 
 	@Test
 	void shouldReturnOrderWhenClientMakeOrder() {
 		final OrderDto testOrder = createTestOrder();
 
-		final OrderDto order = orderService.createOrder(testOrder);
+		final OrderDto order = orderFacade.createOrder(testOrder);
 
 		assertEquals(2, order.getOrderEntries().size());
 		assertEquals("5100.00", order.getTotalPrice().toString());

@@ -8,5 +8,5 @@ import group.itechart.orderplanning.service.dto.OrderDto;
 
 public interface OrderService {
 
-	Order createOrder(OrderDto orderDto);
+	Order createOrder(Order order);
 }

@@ -45,15 +45,11 @@ public class OrderConverter extends AbstractConverter<OrderDto, Order> {
 
 	@Override
 	public Order toEntity(final OrderDto dto) {
-
 		final Order order = super.toEntity(dto);
 		final Client client = getClient(dto);
 		order.setClient(client);
 		final List<OrderEntry> orderEntries = orderEntryConverter.toEntities(dto.getOrderEntries());
-
-
 		order.setOrderEntries(orderEntries);
-
 		return order;
 	}
 

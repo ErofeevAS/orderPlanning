@@ -12,7 +12,6 @@ import group.itechart.orderplanning.service.dto.OrderDto;
 @Component
 public class OrderFacadeImpl implements OrderFacade {
 
-
 	private final OrderService orderService;
 	private final OrderConverter orderConverter;
 
@@ -23,7 +22,8 @@ public class OrderFacadeImpl implements OrderFacade {
 
 	@Override
 	public OrderDto createOrder(final OrderDto orderDto) {
-		final Order order = orderService.createOrder(orderDto);
+		Order order = orderConverter.toEntity(orderDto);
+		order = orderService.createOrder(order);
 		return orderConverter.toDto(order);
 	}
 }

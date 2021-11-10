@@ -12,7 +12,7 @@ public interface WareHouseService {
 
 	List<WareHouse> findWareHousesInRadius(Coordinates clientCoordinates, double radius, int accuracy);
 
-	List<WareHouse> getWareHousesInCoordinates(final Coordinates clientCoordinates, final Long productId,
+	List<WareHouse> findWareHousesInCoordinates(final Coordinates clientCoordinates, final Long productId,
 			final int productAmount);
 
 }

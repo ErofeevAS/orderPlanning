@@ -21,7 +21,9 @@ import group.itechart.orderplanning.repository.entity.WareHouse;
 public class CustomWareHouseRepositoryImpl implements CustomWareHouseRepository {
 
 	private final EntityManager em;
-	private final static String columnName = "geoHash";
+	private final static String COLUMN_NAME = "geoHash";
+	private final static int GEO_HASH_MIN_LENGTH = 2;
+	private final static int GEO_HASH_MAX_LENGTH = 6;
 
 	public CustomWareHouseRepositoryImpl(final EntityManager em) {
 		this.em = em;
@@ -36,12 +38,10 @@ public class CustomWareHouseRepositoryImpl implements CustomWareHouseRepository 
 		final CriteriaQuery<WareHouse> criteriaQuery = criteriaBuilder.createQuery(WareHouse.class);
 		final Root<WareHouse> wareHouse = criteriaQuery.from(WareHouse.class);
 		final int geoHashLength = geoHashes.get(0).length();
-		if (geoHashLength >= 2 && geoHashLength <= 6) {
-			criteriaQuery.select(wareHouse).where(wareHouse.get(columnName + geoHashLength).in(geoHashes));
+		if (geoHashLength < GEO_HASH_MIN_LENGTH || geoHashLength > GEO_HASH_MAX_LENGTH) {
+			throw new IllegalArgumentException("Geo hash length is " + geoHashLength + ". Must be in range 2 to 6");
 		}
-		else {
-			criteriaQuery.select(wareHouse).where(wareHouse.get(columnName).in(geoHashes));
-		}
+		criteriaQuery.select(wareHouse).where(wareHouse.get(COLUMN_NAME + geoHashLength).in(geoHashes));
 		final TypedQuery<WareHouse> query = em.createQuery(criteriaQuery);
 		return query.getResultList();
 	}

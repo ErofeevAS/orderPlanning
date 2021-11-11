@@ -13,8 +13,6 @@ import lombok.Setter;
 @Embeddable
 @NoArgsConstructor
 @AllArgsConstructor
-@Setter
-@Getter
 public class Coordinates {
 
 	private Double latitude;

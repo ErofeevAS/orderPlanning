@@ -1,18 +1,16 @@
 package group.itechart.orderplanning.service.converter.impl;
 
-import java.math.BigDecimal;
-
+import group.itechart.orderplanning.repository.entity.OrderEntry;
+import group.itechart.orderplanning.service.dto.OrderEntryDto;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Component;
 
-import group.itechart.orderplanning.repository.entity.OrderEntry;
-import group.itechart.orderplanning.service.dto.OrderEntryDto;
+import java.math.BigDecimal;
 
 
 @Component
 public class OrderEntryConverter extends AbstractConverter<OrderEntryDto, OrderEntry> {
-
-	protected OrderEntryConverter(final ModelMapper modelMapper) {
+	protected OrderEntryConverter(ModelMapper modelMapper) {
 		super(modelMapper);
 	}
 

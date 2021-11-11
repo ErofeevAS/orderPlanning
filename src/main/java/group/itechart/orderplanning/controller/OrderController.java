@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import group.itechart.orderplanning.facade.OrderFacade;
 import group.itechart.orderplanning.service.OrderService;
 import group.itechart.orderplanning.service.dto.OrderDto;
 
@@ -17,15 +18,15 @@ import group.itechart.orderplanning.service.dto.OrderDto;
 @Validated
 public class OrderController {
 
-	private final OrderService orderService;
+	private final OrderFacade orderFacade;
 
-	public OrderController(final OrderService orderService) {
-		this.orderService = orderService;
+	public OrderController(final OrderFacade orderFacade) {
+		this.orderFacade = orderFacade;
 	}
 
 	@PostMapping
 	public OrderDto createOrder(@Valid @RequestBody OrderDto orderDto) {
-		return orderService.createOrder(orderDto);
+		return orderFacade.createOrder(orderDto);
 	}
 
 }

@@ -11,4 +11,6 @@ public interface Converter<D, E> {
 
 	List<D> toDtos(List<E> entities);
 
+	List<E> toEntities(List<D> dtos);
+
 }

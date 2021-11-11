@@ -3,9 +3,10 @@ package group.itechart.orderplanning.service.impl;
 import java.util.List;
 import java.util.Optional;
 
-import javax.transaction.Transactional;
+
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import group.itechart.orderplanning.repository.CityRepository;
 import group.itechart.orderplanning.repository.ClientRepository;
@@ -16,8 +17,8 @@ import group.itechart.orderplanning.service.converter.impl.ClientConverter;
 import group.itechart.orderplanning.service.dto.ClientDto;
 
 
-//Must have @Transactional
 @Service
+@Transactional(readOnly = true)
 public class ClientServiceImpl implements ClientService {
 
 	private final ClientConverter clientConverter;

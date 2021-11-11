@@ -26,18 +26,24 @@ public class OrderConverter extends AbstractConverter<OrderDto, Order> {
 	public OrderDto toDto(final Order entity) {
 		final OrderDto dto = super.toDto(entity);
 
-		//should be another priceService for expansion
 		final BigDecimal totalPrice = entity.getOrderEntries().stream().map(this::calculateEntryPrice)
 				.reduce(BigDecimal.ZERO, BigDecimal::add);
 		dto.setTotalPrice(totalPrice);
-		final List<OrderEntryDto> orderEntryDtos =
-				orderEntryConverter.toDtos(entity.getOrderEntries());
+		final List<OrderEntryDto> orderEntryDtos = orderEntryConverter.toDtos(entity.getOrderEntries());
 		dto.setOrderEntries(orderEntryDtos);
 		return dto;
 	}
 
+	@Override
+	public Order toEntity(final OrderDto dto) {
+		final Order order = super.toEntity(dto);
+		final List<OrderEntry> orderEntries = orderEntryConverter.toEntities(dto.getOrderEntries());
+		order.setOrderEntries(orderEntries);
+		return order;
+	}
 
 	private BigDecimal calculateEntryPrice(OrderEntry entry) {
 		return entry.getProduct().getPrice().multiply(BigDecimal.valueOf(entry.getAmount()));
 	}
+
 }

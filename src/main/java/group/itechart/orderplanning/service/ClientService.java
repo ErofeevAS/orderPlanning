@@ -9,6 +9,5 @@ public interface ClientService {
 
 	ClientDto create(ClientDto client);
 
-	//todo must be pagination
 	List<ClientDto> getClients();
 }

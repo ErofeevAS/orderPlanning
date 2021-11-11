@@ -32,8 +32,8 @@
 		<insert tableName="city">
 			<column name="id" value="2"/>
 			<column name="name" value="Hrodno"/>
-			<column name="latitude" value="54.076235825729185"/>
-			<column name="longitude" value="26.783177389068793"/>
+			<column name="latitude" value="53.90110604502406"/>
+			<column name="longitude" value="27.555032586504367"/>
 		</insert>
 		<insert tableName="city">
 			<column name="id" value="3"/>
@@ -41,27 +41,32 @@
 			<column name="latitude" value="55.1904"/>
 			<column name="longitude" value="30.2049"/>
 		</insert>
-
 	</changeSet>
 
 	<changeSet author="Alexei.Erofeev" id="1-3">
 		<insert tableName="ware_house">
 			<column name="id" value="1"/>
-			<column name="name" value="Central"/>
+			<column name="name" value="test1"/>
 			<column name="city_id" value="3"/>
-			<column name="geo_hash" value="u9dgxs4gu"/>
+			<column name="geo_hash" value="u9eddc"/>
 		</insert>
 		<insert tableName="ware_house">
 			<column name="id" value="3"/>
-			<column name="name" value="North-East"/>
+			<column name="name" value="test2"/>
 			<column name="city_id" value="3"/>
-			<column name="geo_hash" value="u9e5r3ts"/>
+			<column name="geo_hash" value="u9ed75"/>
 		</insert>
 		<insert tableName="ware_house">
 			<column name="id" value="4"/>
-			<column name="name" value="North-East2"/>
+			<column name="name" value="test3"/>
 			<column name="city_id" value="3"/>
-			<column name="geo_hash" value="u9e5pe7jx"/>
+			<column name="geo_hash" value="u9e9gz"/>
+		</insert>
+		<insert tableName="ware_house">
+			<column name="id" value="5"/>
+			<column name="name" value="test4"/>
+			<column name="city_id" value="3"/>
+			<column name="geo_hash" value="u9e8gs"/>
 		</insert>
 	</changeSet>
 

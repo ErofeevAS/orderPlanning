@@ -13,6 +13,7 @@ import java.util.stream.Collectors;
 import javax.persistence.EntityNotFoundException;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import group.itechart.orderplanning.repository.WareHouseRepository;
 import group.itechart.orderplanning.repository.entity.Coordinates;
@@ -24,6 +25,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@Transactional(readOnly = true)
 public class WareHouseServiceImpl implements WareHouseService {
 
 	private final static Map<Double, Integer> radiusToAccuracy = new LinkedHashMap<>();
@@ -34,7 +36,7 @@ public class WareHouseServiceImpl implements WareHouseService {
 		radiusToAccuracy.put(6.0, 4);
 		radiusToAccuracy.put(20.0, 3);
 		radiusToAccuracy.put(80.0, 2);
-//		radiusToAccuracy.put(600.0, 1);
+		radiusToAccuracy.put(600.0, 1);
 	}
 
 	private final WareHouseRepository wareHouseRepository;

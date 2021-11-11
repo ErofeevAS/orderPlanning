@@ -25,11 +25,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class Client {
+public class Client extends BaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 	@Column(unique = true)
 	private String name;
 	@ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.PERSIST })

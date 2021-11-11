@@ -29,7 +29,6 @@ import group.itechart.orderplanning.repository.entity.Order;
 import group.itechart.orderplanning.repository.entity.OrderEntry;
 import group.itechart.orderplanning.repository.entity.Product;
 import group.itechart.orderplanning.repository.entity.WareHouse;
-import group.itechart.orderplanning.service.ClientService;
 import group.itechart.orderplanning.service.ProductService;
 import group.itechart.orderplanning.service.WareHouseService;
 

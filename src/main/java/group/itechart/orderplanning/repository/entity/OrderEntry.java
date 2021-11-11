@@ -21,11 +21,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class OrderEntry {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+public class OrderEntry extends BaseEntity {
 
 	@ManyToOne
 	@JoinColumn(name = "product_id")

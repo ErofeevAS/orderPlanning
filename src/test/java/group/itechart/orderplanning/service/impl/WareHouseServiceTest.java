@@ -10,9 +10,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 
 import java.math.BigDecimal;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Stream;
 
 import javax.persistence.EntityNotFoundException;
@@ -43,17 +41,6 @@ class WareHouseServiceTest {
 
 	private final static double TEST_LATITUDE= 1;
 	private final static double TEST_LONGITUDE = 2;
-
-	private final static Map<Double, Integer> radiusToAccuracy = new LinkedHashMap<>();
-
-	static {
-		radiusToAccuracy.put(0.5, 6);
-		radiusToAccuracy.put(1.0, 5);
-		radiusToAccuracy.put(6.0, 4);
-		radiusToAccuracy.put(20.0, 3);
-		radiusToAccuracy.put(80.0, 2);
-		radiusToAccuracy.put(600.0, 1);
-	}
 
 	@InjectMocks
 	@Spy
@@ -135,7 +122,7 @@ class WareHouseServiceTest {
 			wareHouseService.findWareHousesInCoordinates(coordinates, 1L,
 					5);
 		});
-		verify(wareHouseService, times(5)).findWareHousesInRadius(any(Coordinates.class), anyDouble(), anyInt());
+		verify(wareHouseService, times(6)).findWareHousesInRadius(any(Coordinates.class), anyDouble(), anyInt());
 	}
 
 	@ParameterizedTest
@@ -149,46 +136,5 @@ class WareHouseServiceTest {
 	private static Stream<Arguments> providedWarehouses() {
 		return Stream.of(Arguments.of(1, 5, 1), Arguments.of(2, 5, 1), Arguments.of(2, 500, 0));
 	}
-
-
-
-//	@Test
-//	public void shouldFindWareHousesInRadius(){
-//
-////		double clientLat = 53.90110604502406;
-//		double clientLat = 53.901106;
-////		double clientLong = 27.555032586504367 ;
-//		double clientLong = 27.55503 ;
-//		String getClient = "u9edeh";
-//
-//
-//		double lat1 = 53.887388126150405;
-//		double lon1= 27.551395208902573;
-//		final double distance1 = GeoHashUtils.distance(clientLat, clientLong, lat1, lon1);
-//		String geoWH1 = "u9eddc";
-//
-//
-//		double lat2 =53.849640626463795;
-//		double lon2= 27.556487537545085;
-//		final double distance2= GeoHashUtils.distance(clientLat, clientLong, lat2, lon2);
-//		String geoWH2 = "u9ed75";
-//
-//		double lat3 =53.78650914283024 ;
-//		double lon3= 27.58849646044086;
-//		final double distance3 = GeoHashUtils.distance(clientLat, clientLong, lat3, lon3);
-//		String geoWH3 = "u9e9gz";
-//
-//
-//		double lat4 =53.59590509952606 ;
-//		double lon4= 27.584211326185816;
-//		final double distance4 = GeoHashUtils.distance(clientLat, clientLong, lat4, lon4);
-//
-//		String geoWH4 = "u9e8gs";
-//
-//		final List<String> commonGeoHashForCircle = getCommonGeoHashForCircle(clientLat, clientLong, 6, 4);
-//
-//
-//	}
-
 
 }

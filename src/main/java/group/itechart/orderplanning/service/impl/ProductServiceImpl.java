@@ -3,6 +3,7 @@ package group.itechart.orderplanning.service.impl;
 import java.util.Optional;
 
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import group.itechart.orderplanning.repository.ProductRepository;
 import group.itechart.orderplanning.repository.entity.Product;
@@ -10,6 +11,7 @@ import group.itechart.orderplanning.service.ProductService;
 
 
 @Service
+@Transactional(readOnly = true)
 public class ProductServiceImpl implements ProductService {
 
 	private final ProductRepository productRepository;

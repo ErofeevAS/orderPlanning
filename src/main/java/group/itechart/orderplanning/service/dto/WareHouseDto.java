@@ -16,7 +16,4 @@ public class WareHouseDto {
 
 	private CityDto city;
 
-	//	@JsonIgnore
-	//	private List<StockLevel> stockLevels = new ArrayList<>();
-
 }

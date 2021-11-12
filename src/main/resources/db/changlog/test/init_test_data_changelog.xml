@@ -96,6 +96,18 @@
 			<column name="ware_house_id" value="3"/>
 			<column name="amount" value="200"/>
 		</insert>
+		<insert tableName="stock_level">
+			<column name="id" value="6"/>
+			<column name="product_id" value="1"/>
+			<column name="ware_house_id" value="5"/>
+			<column name="amount" value="100"/>
+		</insert>
+		<insert tableName="stock_level">
+			<column name="id" value="7"/>
+			<column name="product_id" value="1"/>
+			<column name="ware_house_id" value="4"/>
+			<column name="amount" value="100"/>
+		</insert>
 	</changeSet>
 
 	<changeSet author="Alexei.Erofeev" id="1-5">

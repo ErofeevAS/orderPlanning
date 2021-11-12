@@ -38,6 +38,9 @@ public class WareHouseServiceIntegrationTest extends BaseContainerTest {
 	private final static double R5 = 80.0;
 	private final static double R6 = 600.0;
 
+	private final static Long PRODUCT_ID_1 = 1L;
+	private final static Long PRODUCT_ID_2 = 2L;
+
 	static {
 		radiusToAccuracy.put(R1, 6);
 		radiusToAccuracy.put(R2, 5);
@@ -52,21 +55,33 @@ public class WareHouseServiceIntegrationTest extends BaseContainerTest {
 
 	@ParameterizedTest
 	@MethodSource("testData")
-	public void shouldFindNearestWareHouseInRadius(double radius, int accuracy, int amount) {
+	public void shouldFindNearestWareHouseInRadius(long productId, double radius, int accuracy, int amount) {
 		final double lat = 53.901106;
 		final double lon = 27.55503;
 		final Coordinates coordinates = new Coordinates(lat, lon);
 
-		final List<WareHouse> wareHousesInRadius = wareHouseService.findWareHousesInRadius(coordinates, radius, accuracy);
+		final List<WareHouse> wareHousesInRadius = wareHouseService.findWareHousesInRadius(coordinates, radius, accuracy, productId, 1);
 
 		assertEquals(amount, wareHousesInRadius.size());
 	}
 
 	private static Stream<Arguments> testData() {
 
-		return Stream.of(Arguments.of(R1, radiusToAccuracy.get(R1), 0), Arguments.of(R2, radiusToAccuracy.get(R2), 1),
-				Arguments.of(R3, radiusToAccuracy.get(R3), 2), Arguments.of(R4, radiusToAccuracy.get(R4), 4),
-				Arguments.of(R5, radiusToAccuracy.get(R5), 4),Arguments.of(R6, radiusToAccuracy.get(R6), 4));
+		final List<Arguments> firstProduct = List.of(Arguments.of(PRODUCT_ID_1, R1, radiusToAccuracy.get(R1), 0),
+				Arguments.of(PRODUCT_ID_1, R2, radiusToAccuracy.get(R2), 1),
+				Arguments.of(PRODUCT_ID_1, R3, radiusToAccuracy.get(R3), 2),
+				Arguments.of(PRODUCT_ID_1, R4, radiusToAccuracy.get(R4), 4),
+				Arguments.of(PRODUCT_ID_1, R5, radiusToAccuracy.get(R5), 4),
+				Arguments.of(PRODUCT_ID_1, R6, radiusToAccuracy.get(R6), 4));
+
+		final List<Arguments> secondProduct = List.of(Arguments.of(PRODUCT_ID_2, R1, radiusToAccuracy.get(R1), 0),
+				Arguments.of(PRODUCT_ID_2, R2, radiusToAccuracy.get(R2), 1),
+				Arguments.of(PRODUCT_ID_2, R3, radiusToAccuracy.get(R3), 1),
+				Arguments.of(PRODUCT_ID_2, R4, radiusToAccuracy.get(R4), 1),
+				Arguments.of(PRODUCT_ID_2, R5, radiusToAccuracy.get(R5), 1),
+				Arguments.of(PRODUCT_ID_2, R6, radiusToAccuracy.get(R6), 1));
+
+		return Stream.concat(firstProduct.stream(), secondProduct.stream());
 	}
 
 }

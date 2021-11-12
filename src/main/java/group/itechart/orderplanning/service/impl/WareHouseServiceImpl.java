@@ -51,9 +51,9 @@ public class WareHouseServiceImpl implements WareHouseService {
 	}
 
 	@Override
-	public List<WareHouse> findWareHousesInRadius(final Coordinates clientCoordinates, final double radius, int accuracy) {
+	public List<WareHouse> findWareHousesInRadius(final Coordinates clientCoordinates, final double radius, int accuracy,Long productId, int amount) {
 		final List<String> geoHashes = getGeoHashes(clientCoordinates, radius, accuracy);
-		return wareHouseRepository.findWareHousesByGeoHash(geoHashes);
+		return wareHouseRepository.findWareHousesByGeoHash(geoHashes,productId,amount);
 	}
 
 	@Override
@@ -64,9 +64,8 @@ public class WareHouseServiceImpl implements WareHouseService {
 		final Set<Double> radiuses = radiusToAccuracy.keySet();
 		for (double radius : radiuses) {
 			log.debug("------SEARCHING WAREHOUSES IN {} km radius for product with id: {}", radius, productId);
-			wareHouses = findWareHousesInRadius(clientCoordinates, radius, radiusToAccuracy.get(radius));
-			log.debug("------were found {} warehouses for product with id: {}", wareHouses.size(), productId);
-			wareHouses = filterWareHousesByProductAvailability(productId, productAmount, wareHouses);
+			wareHouses = findWareHousesInRadius(clientCoordinates, radius, radiusToAccuracy.get(radius), productId,
+					productAmount);
 			if (!wareHouses.isEmpty()) {
 				return wareHouses;
 			}

@@ -5,6 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.ArgumentMatchers.anyInt;
+import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.Mockito.doReturn;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -39,8 +40,10 @@ class WareHouseServiceTest {
 	private final static String TEST_WH1_NAME = "test_wareHouse_1";
 	private final static String TEST_WH2_NAME = "test_wareHouse_2";
 
-	private final static double TEST_LATITUDE= 1;
+	private final static double TEST_LATITUDE = 1;
 	private final static double TEST_LONGITUDE = 2;
+	private final static long productId = 1L;
+	private final static int productAmount = 5;
 
 	@InjectMocks
 	@Spy
@@ -67,7 +70,7 @@ class WareHouseServiceTest {
 	private List<WareHouse> testWarehouses;
 
 	@BeforeEach
-	public void init(){
+	public void init() {
 		doReturn(TEST_LATITUDE).when(coordinates).getLatitude();
 		doReturn(TEST_LONGITUDE).when(coordinates).getLongitude();
 
@@ -79,7 +82,6 @@ class WareHouseServiceTest {
 		doReturn("test2").when(product2).getName();
 		doReturn(BigDecimal.valueOf(10)).when(product2).getPrice();
 
-
 		doReturn(1L).when(stockLevel1).getId();
 		doReturn(product1).when(stockLevel1).getProduct();
 		doReturn(5).when(stockLevel1).getAmount();
@@ -87,7 +89,6 @@ class WareHouseServiceTest {
 		doReturn(2L).when(stockLevel2).getId();
 		doReturn(product2).when(stockLevel2).getProduct();
 		doReturn(5).when(stockLevel2).getAmount();
-
 
 		doReturn(1L).when(wareHouse1).getId();
 		doReturn(TEST_WH1_NAME).when(wareHouse1).getName();
@@ -103,9 +104,8 @@ class WareHouseServiceTest {
 
 	@Test
 	public void shouldFindWarehousesNearbyCoordinatesInRadius() {
-		final long productId = 1L;
-		final int productAmount = 5;
-		doReturn(testWarehouses).when(wareHouseService).findWareHousesInRadius(coordinates, 6, 4);
+
+		doReturn(testWarehouses).when(wareHouseService).findWareHousesInRadius(coordinates, 6, 4, productId, productAmount);
 		doReturn(testWarehouses).when(wareHouseService)
 				.filterWareHousesByProductAvailability(productId, productAmount, testWarehouses);
 
@@ -113,16 +113,17 @@ class WareHouseServiceTest {
 				productAmount);
 
 		assertEquals(wareHousesInCoordinates, testWarehouses);
-		verify(wareHouseService, times(3)).findWareHousesInRadius(any(Coordinates.class), anyDouble(), anyInt());
+		verify(wareHouseService, times(3)).findWareHousesInRadius(any(Coordinates.class), anyDouble(), anyInt(), eq(productId),
+				eq(productAmount));
 	}
 
 	@Test
-	public void shouldThrowEntityNotFoundExceptionWhenThereIsNoWareHouseWithProduct(){
-		assertThrows(EntityNotFoundException.class,()->{
-			wareHouseService.findWareHousesInCoordinates(coordinates, 1L,
-					5);
+	public void shouldThrowEntityNotFoundExceptionWhenThereIsNoWareHouseWithProduct() {
+		assertThrows(EntityNotFoundException.class, () -> {
+			wareHouseService.findWareHousesInCoordinates(coordinates, productId, productAmount);
 		});
-		verify(wareHouseService, times(6)).findWareHousesInRadius(any(Coordinates.class), anyDouble(), anyInt());
+		verify(wareHouseService, times(6)).findWareHousesInRadius(any(Coordinates.class), anyDouble(), anyInt(), eq(productId),
+				eq(productAmount));
 	}
 
 	@ParameterizedTest

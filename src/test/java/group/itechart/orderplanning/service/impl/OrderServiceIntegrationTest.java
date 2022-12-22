@@ -25,7 +25,7 @@ import group.itechart.orderplanning.service.dto.ProductDto;
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 @TestPropertySource(value = { "classpath:application-test.properties" })
 @ActiveProfiles({"test"})
-public class OrderServiceTest extends BaseContainerTest {
+public class OrderServiceIntegrationTest extends BaseContainerTest {
 
 	@Autowired
 	private OrderFacade orderFacade;

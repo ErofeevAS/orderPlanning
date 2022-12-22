@@ -18,11 +18,8 @@ import lombok.Setter;
 @NoArgsConstructor
 @Setter
 @Getter
-public class City {
+public class City extends BaseEntity {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
 	@Column
 	private String name;
 	@Embedded

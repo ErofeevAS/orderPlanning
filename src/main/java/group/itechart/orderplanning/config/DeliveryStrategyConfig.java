@@ -1,4 +1,4 @@
-package group.itechart.orderplanning.strategy;
+package group.itechart.orderplanning.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Function;
 import java.util.stream.Collectors;
+
+import group.itechart.orderplanning.strategy.DeliveryStrategy;
+
 
 @Configuration
 public class DeliveryStrategyConfig {
